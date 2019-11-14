@@ -34,56 +34,52 @@ List sudokuBoard2 = [
   [ 8, 7, 3, 5, 1, 2, 9, 6, 4 ]
 ];
 
-bool sudokuValidator(List sudokuBoard){
+bool sudokuValidator(List <List<int>>sudokuBoard){
+  return isValidEntry(sudokuBoard)&&checkRow(sudokuBoard)&&checkCol(sudokuBoard)&&checkBoxesCompatibility(sudokuBoard);
+}
 
-  for(int i = 0; i<9; i++){
-    for(int j = 0; j<9; j++){
-      if(sudokuBoard[i][j] > 9 || sudokuBoard[i][j] < 0){
+  bool isValidEntry(List<List<int>> board) => board.expand((row) => row)
+      .every((number) => number > 0 && number <= board.length);
+
+  bool checkRow(List<List<int>> board) {
+    if (board.any((List<int> row) => checkDuplication(row))) {
+      return false;
+    }
+    return true;
+  }
+
+  bool checkCol(List<List<int>> board){
+    for (int col = 0; col < board.length; col++) {
+      List colElementsList = board.map((List row) => row[col]).toList();
+      if (checkDuplication(colElementsList)) {
         return false;
       }
+      return true;
     }
   }
 
-  for(int i = 0; i< 9; i++){
-    if(sudokuBoard[i].toSet().length != 9){
-      return false;
+  bool checkBoxesCompatibility(List<List<int>> board) {
+    List finalList = [];
+    for (int row = 0; row < 9; row = row + 3) {
+      for (int col = 0; col < 9; col = col + 3) {
+        for (int finalListRow = row; finalListRow < row + 3; finalListRow++) {
+          for (int finalListCol = col; finalListCol < col + 3; finalListCol++) {
+            finalList.add(board[finalListRow][finalListCol]);
+          }
+        }
+        return finalList.toSet().length == 9;
+      }
 
-    }
-  }
-  List newList = [];
-  for(int i = 0; i <9; i++){
-    for(int j = 0; j<9; j++){
-      newList.add(sudokuBoard[j][i]);
-    }
-    if(newList.toSet().length != 9){
-      return false;
-    }
-  }
-
-  if(checkForBoxes([0,1,2], [0,1,2], sudokuBoard) == false || checkForBoxes([3,4,5], [0,1,2], sudokuBoard) == false || checkForBoxes([6,7,8], [0,1,2], sudokuBoard) == false || checkForBoxes([0,1,2], [3,4,5], sudokuBoard) == false || checkForBoxes([3,4,5], [3,4,5], sudokuBoard) == false || checkForBoxes([6,7,8], [3,4,5], sudokuBoard) == false || checkForBoxes([0,1,2], [3,4,5], sudokuBoard) == false ||checkForBoxes([0,1,2], [6,7,8], sudokuBoard) == false || checkForBoxes([3,4,5], [6,7,8], sudokuBoard) == false || checkForBoxes([6,7,8], [6,7,8], sudokuBoard) == false ){
-    return false;
-  }
-
-  return true;
-}
-
-
-
-bool checkForBoxes(List a, List b, List board){
-  List boxList = [];
-  for(int i = a[0]; i<= a[2]; i++){
-    for(int j =b[0]; j<= b[2]; j++) {
-      boxList.add(board[j][i]);
     }
 
   }
 
-  if(boxList.toSet().length != 9){
-    return false;
-  }
+  bool checkDuplication(List list) => list.toSet().length != list.length;
 
-  return true;
-}
+
+
+
+
 
 // Challenge 3
 // Sort by Factor Length
