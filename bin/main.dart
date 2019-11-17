@@ -54,8 +54,8 @@ bool sudokuValidator(List <List<int>>sudokuBoard){
       if (checkDuplication(colElementsList)) {
         return false;
       }
-      return true;
     }
+    return true;
   }
 
   bool checkBoxesCompatibility(List<List<int>> board) {
@@ -67,7 +67,7 @@ bool sudokuValidator(List <List<int>>sudokuBoard){
             finalList.add(board[finalListRow][finalListCol]);
           }
         }
-        return finalList.toSet().length == 9;
+        return !checkDuplication(finalList);
       }
 
     }
