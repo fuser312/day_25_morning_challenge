@@ -35,17 +35,19 @@ List sudokuBoard2 = [
 ];
 
 bool sudokuValidator(List <List<int>>sudokuBoard){
-  return isValidEntry(sudokuBoard)&&checkRow(sudokuBoard)&&checkCol(sudokuBoard)&&checkBoxesCompatibility(sudokuBoard);
+  return isBoardOfRightSize(sudokuBoard) && isValidEntry(sudokuBoard) && checkRow(sudokuBoard) && checkCol(sudokuBoard) &&
+      checkBoxesCompatibility(sudokuBoard);
 }
 
   bool isValidEntry(List<List<int>> board) => board.expand((row) => row)
       .every((number) => number > 0 && number <= board.length);
 
+  bool isBoardOfRightSize(List<List<int>> board) =>
+    board.every((row) => row.length % 3 == 0) && (board.length % 3 == 0);
+
   bool checkRow(List<List<int>> board) {
-    if (board.any((List<int> row) => checkDuplication(row))) {
-      return false;
-    }
-    return true;
+    return !(board.any((List<int> row) => checkDuplication(row)));
+
   }
 
   bool checkCol(List<List<int>> board){
